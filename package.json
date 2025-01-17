@@ -1,0 +1,16 @@
+{
+	"name": "migrade_api_rest",
+	"version": "1.0.0",
+	"main": "index.ts",
+	"scripts": {
+		"start": "nodemon ./dist/index.js TZ='UTC'",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": ["Api","Backend","MiGrade"],
+	"author": "Emilio Rodríguez",
+	"license": "ISC",
+	"description": "",
+	"devDependencies": {
+		"typescript": "^5.7.3"
+	}
+}
