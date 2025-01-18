@@ -2,9 +2,10 @@
 import bodyParser from "body-parser"; // Importa el módulo bodyParser para analizar el cuerpo de las solicitudes
 import cors from "cors"; // Importa el módulo cors para habilitar el intercambio de recursos entre diferentes orígenes
 import { Request, Response, NextFunction } from "express"; // Importar tipos de Express
+import Servidor from "./classes/servidor"; // Importa la clase Servidor desde el archivo './classes/servidor'
 import { logError } from "./logger"; // Importar logError
-import Servidor from './classes/servidor'; // Importa la clase Servidor desde el archivo './classes/servidor'
-import estudianteRoutes from "./routes/estudiante.routes"; // Importar las rutas de estudiantes
+import AppRouter from "./routes/app.routes"; // Importa las rutas de la aplicación desde el archivo './routes/app.routes'
+import AuthRouter from "./routes/auth.routes";
 
 // Definición de la clase Aplicacion
 class Aplicacion {
@@ -33,7 +34,10 @@ class Aplicacion {
     // Método privado para configurar las rutas de la aplicación
     private configurarRutas(): void {
         // Asocia las rutas de la aplicación bajo el prefijo '/api/' utilizando el enrutador de AppRouter
-        this.servidor.app.use("/api/", estudianteRoutes); // Agregar las rutas de estudiantes
+        this.servidor.app.use("/api/", [
+            AppRouter,
+            AuthRouter
+        ]);
     }
 
     // Método privado para configurar el manejo de errores
@@ -53,7 +57,7 @@ class Aplicacion {
         // Inicia el servidor y muestra un mensaje indicando el puerto en el que está corriendo
         this.servidor.start(() => {
             console.log(
-                `Novelteak API corriendo en el puerto ${this.servidor.port}`
+                `MiGrade API corriendo en el puerto ${this.servidor.port}`
             );
         });
     }
