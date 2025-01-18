@@ -1,110 +1,130 @@
-import pool from '../environment/environment';
-import bcrypt from 'bcrypt';
-import { PoolClient } from 'pg';
+import pool from "../environment/environment";
+import bcrypt from "bcrypt";
 
 export class Auth {
-
     public saltRounds = 10;
     public pool = pool;
 
     public constructor() {}
 
     public async login(datos: any) {
-        const connection: PoolClient = await this.pool.connect();
+        const connection = await this.pool.getConnection();
         try {
-            if (!datos.usuario || !datos.password) {
+            if (!datos.identification || !datos.password) {
                 return {
                     response: "¡El contenido no puede estar vacío!",
-                    tipo: false
-                }
+                    tipo: false,
+                };
             } else {
-                const result = await connection.query('CALL sp_tenant_rw_iniciar_sesion($1)', [datos.usuario]);
-                const rows = result.rows;
-                if (rows.length > 0) {
-                    return rows[0];
+                const [rows]: any[] = await connection.query(
+                    "CALL sp_iniciar_sesion(?)",
+                    [datos.identification]
+                );
+                if (rows[0].length > 0) {
+                    return rows[0][0];
                 } else {
                     return {
                         response: "¡El usuario no existe!",
-                        tipo: false
-                    }
+                        tipo: false,
+                    };
                 }
             }
         } catch (err: any) {
-            const procName = err.procName || 'desconocido';
-            throw new Error(`Se presentó un error en el procedimiento ${procName}...${err.message}`);
+            const procName = err.procName || "desconocido";
+            throw new Error(
+                `Se presentó un error en el procedimiento ${procName}...${err.message}`
+            );
         } finally {
             connection.release();
         }
     }
 
     public async getInfoUsuario(usuario: any) {
-        const connection: PoolClient = await this.pool.connect();
+        const connection = await this.pool.getConnection();
         try {
-            const result = await connection.query('CALL sp_tenant_rw_usuario_datos($1)', [usuario]);
-            const rows = result.rows;
-            if (rows.length > 0) {
-                return rows[0];
+            const [rows]: any[] = await connection.query(
+                "CALL sp_usuario_datos(?)",
+                [usuario]
+            );
+
+            if (rows[0].length > 0) {
+                return rows[0][0];
             } else {
                 return {
                     response: "¡El usuario no existe!",
-                    tipo: false
-                }
+                    tipo: false,
+                };
             }
         } catch (err: any) {
-            throw new Error(`Se presentó un error en el procedimiento ${err.procName}...${err.message}`);
+            throw new Error(
+                `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
+            );
         } finally {
             connection.release();
         }
     }
 
     public async insertUser(datos: any) {
-        const connection: PoolClient = await this.pool.connect();
+        const connection = await this.pool.getConnection();
         try {
             const salt = bcrypt.genSaltSync(this.saltRounds);
             const hash = bcrypt.hashSync(datos.password, salt);
-            await connection.query('CALL sp_tenant_crear_usuario($1, $2, $3, $4, $5)', [datos.nombre, datos.usuario, hash, datos.email, datos.pais]);
+            await connection.query(
+                "CALL sp_crear_usuario(?, ?, ?)",
+                [datos.identification, datos.name, hash]
+            );
         } catch (err: any) {
-            throw new Error(`Se presentó un error en el procedimiento ${err.procName}...${err.message}`);
+            throw new Error(
+                `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
+            );
         } finally {
             connection.release();
         }
     }
 
     public async getUsuarios(id_usuario: any) {
-        const connection: PoolClient = await this.pool.connect();
+        const connection = await this.pool.getConnection();
         try {
-            const result = await connection.query('CALL sp_tenant_usuarios($1)', [(id_usuario == 0) ? null : id_usuario]);
-            const rows = result.rows;
-            if (rows.length > 0) {
-                return rows;
+            const [rows]: any[] = await connection.query(
+                "CALL sp_usuarios(?)",
+                [id_usuario == 0 ? null : id_usuario]
+            );
+            if (rows[0].length > 0) {
+                return rows[0];
             } else {
                 return {
                     response: "¡El usuario no existe!",
-                    tipo: false
-                }
+                    tipo: false,
+                };
             }
         } catch (err: any) {
-            throw new Error(`Se presentó un error en el procedimiento ${err.procName}...${err.message}`);
+            throw new Error(
+                `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
+            );
         } finally {
             connection.release();
         }
     }
 
     public async getUsuarioMenu(id_usuario: any) {
-        const connection: PoolClient = await this.pool.connect();
+        const connection = await this.pool.getConnection();
         try {
-            const result = await connection.query('CALL sp_tenant_usuario_menu($1)', [(id_usuario == 0) ? null : id_usuario]);
-            const rows = result.rows;
-            if (rows.length > 0) {
-                return rows;
+            const [rows]: any[] = await connection.query(
+                "CALL sp_tenant_usuario_menu(?)",
+                [id_usuario == 0 ? null : id_usuario]
+            );
+            if (rows[0].length > 0) {
+                return rows[0];
             } else {
                 return {
                     response: "¡El usuario no tiene menu!",
-                    tipo: false
+                    tipo: false,
                 };
             }
         } catch (err: any) {
-            throw new Error(`Se presentó un error en el procedimiento ${err.procName}...${err.message}`);
+            throw new Error(
+                `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
+            );
         } finally {
             connection.release();
         }
