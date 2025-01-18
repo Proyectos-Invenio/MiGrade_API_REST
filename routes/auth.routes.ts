@@ -15,7 +15,7 @@ router.post('/auth/login', (req: Request, res: Response) => {
     let datos = { ...req.body };
 
     auth.login(datos).then( (result) => {
-        bcrypt.compare( datos.password, result.pass,  function(err, result2) {
+        bcrypt.compare( datos.password, result.password,  function(err, result2) {
 
             if (result2  == false || result2 === undefined) {
                 return res.status(200).send({
@@ -23,7 +23,7 @@ router.post('/auth/login', (req: Request, res: Response) => {
                     success: false
                 });
             } else {
-                auth.getInfoUsuario(datos.usuario).then((infoUsuario: any) => {
+                auth.getInfoUsuario(datos.identification).then((infoUsuario: any) => {
                     return res.status(200).send({
                         info: [infoUsuario],
                         success: true,
