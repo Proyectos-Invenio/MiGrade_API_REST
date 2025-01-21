@@ -6,6 +6,13 @@ import Servidor from "./classes/servidor"; // Importa la clase Servidor desde el
 import { logError } from "./logger"; // Importar logError
 import AppRouter from "./routes/app.routes"; // Importa las rutas de la aplicación desde el archivo './routes/app.routes'
 import AuthRouter from "./routes/auth.routes";
+import EstudianteRouter from "./routes/estudiante.routes";
+import AdminRouter from "./routes/administrador.routes";
+import ProfesorRouter from "./routes/profesor.routes";
+import PadreRouter from "./routes/padre.routes";
+
+
+
 
 // Definición de la clase Aplicacion
 class Aplicacion {
@@ -36,7 +43,11 @@ class Aplicacion {
         // Asocia las rutas de la aplicación bajo el prefijo '/api/' utilizando el enrutador de AppRouter
         this.servidor.app.use("/api/", [
             AppRouter,
-            AuthRouter
+            AuthRouter,
+            EstudianteRouter,
+            AdminRouter,
+            ProfesorRouter,
+            PadreRouter,
         ]);
     }
 
