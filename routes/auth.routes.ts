@@ -45,25 +45,6 @@ router.post('/auth/login', (req: Request, res: Response) => {
     });
 });
 
-router.post('/auth/user/create', (req: Request, res: Response) => {
-
-    let datos = { ...req.body };
-
-    auth.insertUser(datos).then((result: any) => {
-        res.status(200).json({
-            'success': true,
-            'result': result
-        });
-    }).catch(function (err: any) {
-        console.log('err: ', err);
-
-        res.status(500).json({
-            'success': false,
-            'result': err
-        });
-    });
-});
-
 router.get('/auth/user/info/:usuario', (req: Request, res: Response) => {
 
     let usuario = req.params.usuario;
@@ -77,22 +58,5 @@ router.get('/auth/user/info/:usuario', (req: Request, res: Response) => {
         });
     });
 });
-
-router.get('/auth/user/:id_usuario', (req: Request, res: Response) => {
-
-    let id_usuario      = req.params.id_usuario;
-
-    auth.getUsuarios(id_usuario).then((val: any) => {
-        res.status(200).json(val);
-    }, (err: any) => {
-        console.log('err: ', err);
-
-        res.status(500).json({
-            ok: false,
-            error: err
-        });
-    });
-});
-
 
 export default router;

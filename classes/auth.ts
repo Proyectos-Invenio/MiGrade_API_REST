@@ -39,58 +39,16 @@ export class Auth {
         }
     }
 
-    public async getInfoUsuario(usuario: any) {
+    public async getInfoUsuario(identification: any) {
         const connection = await this.pool.getConnection();
         try {
             const [rows]: any[] = await connection.query(
                 "CALL sp_usuario_datos(?)",
-                [usuario]
+                [identification]
             );
 
             if (rows[0].length > 0) {
                 return rows[0][0];
-            } else {
-                return {
-                    response: "¡El usuario no existe!",
-                    tipo: false,
-                };
-            }
-        } catch (err: any) {
-            throw new Error(
-                `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
-            );
-        } finally {
-            connection.release();
-        }
-    }
-
-    public async insertUser(datos: any) {
-        const connection = await this.pool.getConnection();
-        try {
-            const salt = bcrypt.genSaltSync(this.saltRounds);
-            const hash = bcrypt.hashSync(datos.password, salt);
-            await connection.query(
-                "CALL sp_crear_usuario(?, ?, ?)",
-                [datos.identification, datos.name, hash]
-            );
-        } catch (err: any) {
-            throw new Error(
-                `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
-            );
-        } finally {
-            connection.release();
-        }
-    }
-
-    public async getUsuarios(id_usuario: any) {
-        const connection = await this.pool.getConnection();
-        try {
-            const [rows]: any[] = await connection.query(
-                "CALL sp_usuarios(?)",
-                [id_usuario == 0 ? null : id_usuario]
-            );
-            if (rows[0].length > 0) {
-                return rows[0];
             } else {
                 return {
                     response: "¡El usuario no existe!",
