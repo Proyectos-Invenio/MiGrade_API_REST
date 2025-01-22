@@ -59,4 +59,22 @@ router.get('/auth/user/info/:usuario', (req: Request, res: Response) => {
     });
 });
 
+router.get("/auth/rol/menu/:rol_usuario", (req: Request, res: Response) => {
+    let rol_usuario = req.params.rol_usuario;
+
+    auth.getUsuarioMenu(rol_usuario).then(
+        (val: any) => {
+            res.status(200).json(val);
+        },
+        (err: any) => {
+            console.log("err: ", err);
+
+            res.status(500).json({
+                ok: false,
+                error: err,
+            });
+        }
+    );
+});
+
 export default router;

@@ -64,12 +64,12 @@ export class Auth {
         }
     }
 
-    public async getUsuarioMenu(id_usuario: any) {
+    public async getUsuarioMenu(rol_usuario: any) {
         const connection = await this.pool.getConnection();
         try {
             const [rows]: any[] = await connection.query(
-                "CALL sp_tenant_usuario_menu(?)",
-                [id_usuario == 0 ? null : id_usuario]
+                "CALL sp_menu_usuario(?)",
+                [rol_usuario == 0 ? null : rol_usuario]
             );
             if (rows[0].length > 0) {
                 return rows[0];
