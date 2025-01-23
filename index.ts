@@ -10,7 +10,9 @@ import EstudianteRouter from "./routes/estudiante.routes";
 import AdminRouter from "./routes/administrador.routes";
 import ProfesorRouter from "./routes/profesor.routes";
 import PadreRouter from "./routes/padre.routes";
-
+import AsignaturasRouter from "./routes/asignaturas.routes";
+import RolesRouter from "./routes/roles.routes";
+import VisibilidadMenuRouter from "./routes/visibilidad_menu.routes";
 
 
 
@@ -48,6 +50,9 @@ class Aplicacion {
             AdminRouter,
             ProfesorRouter,
             PadreRouter,
+            AsignaturasRouter,
+            RolesRouter,
+            VisibilidadMenuRouter
         ]);
     }
 
