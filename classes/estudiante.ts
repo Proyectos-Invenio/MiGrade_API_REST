@@ -10,13 +10,17 @@ export class Estudiante {
         try {
             const salt = bcrypt.genSaltSync(this.saltRounds);
             const hash = bcrypt.hashSync(datos.password, salt);
-            await connection.query("CALL sp_crear_estudiante(?, ?, ?, ?, ?)", [
-                datos.identification,
-                datos.nombre,
-                datos.padre,
-                datos.email,
-                hash
-            ]);
+            await connection.query(
+                "CALL sp_crear_estudiante(?, ?, ?, ?, ?, ?)",
+                [
+                    datos.identification,
+                    datos.nombre,
+                    datos.encargado,
+                    datos.email,
+                    hash,
+                    datos.sexo,
+                ]
+            );
         } catch (err: any) {
             throw new Error(
                 `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
@@ -30,8 +34,8 @@ export class Estudiante {
         const connection = await this.pool.getConnection();
         try {
             const [rows]: any[] = await connection.query(
-                'CALL sp_obtener_estudiante(?)',
-                [(id == 0) ? null : id]
+                "CALL sp_obtener_estudiante(?)",
+                [id == 0 ? null : id]
             );
             if (rows[0].length > 0) {
                 return rows[0];
@@ -53,12 +57,10 @@ export class Estudiante {
     public async updateEstudiante(id: any, datos: any) {
         const connection = await this.pool.getConnection();
         try {
-            await connection.query("CALL sp_actualizar_estudiante(?, ?, ?, ?)", [
-                id,
-                datos.nombre,
-                datos.padre,
-                datos.email
-            ]);
+            await connection.query(
+                "CALL sp_actualizar_estudiante(?, ?, ?, ?)",
+                [id, datos.nombre, datos.padre, datos.email]
+            );
         } catch (err: any) {
             throw new Error(
                 `Se presentó un error en el procedimiento ${err.procName}...${err.message}`
