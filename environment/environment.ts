@@ -14,7 +14,7 @@ dotenv.config();
  */
 
 // Puerto de la aplicación. En el entorno de desarrollo, se toma del valor de SERVER_PORT del entorno, o de lo contrario, se utiliza el puerto predeterminado 5002.
-export const SERVER_PORT: number = Number(process.env.SERVER_PORT) || 443;
+export const SERVER_PORT: number = Number(process.env['SERVER_PORT']) || 443;
 
 /**
  * Clave Secreta para la generación de tokens JWT.
@@ -22,7 +22,7 @@ export const SERVER_PORT: number = Number(process.env.SERVER_PORT) || 443;
  * @constant {string} clave_secreta - La clave secreta utilizada para firmar los tokens JWT.
  */
 export const clave_secreta =
-    process.env.JWT_SECRET || ",2>vJC-!{]+OQcI?b_@@i0[}/Rx&{_";
+    process.env['JWT_SECRET'] || ",2>vJC-!{]+OQcI?b_@@i0[}/Rx&{_";
 
 // Validación de variables de entorno críticas
 const requiredEnvVars = ["DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME"];
@@ -35,14 +35,14 @@ requiredEnvVars.forEach((key) => {
 
 // Configuración del pool de conexiones
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: process.env['DB_HOST'],
+    user: process.env['DB_USER'],
+    password: process.env['DB_PASSWORD'],
+    database: process.env['DB_NAME'],
     waitForConnections: true,
-    connectionLimit: Number(process.env.DB_CONNECTION_LIMIT) || 20,
+    connectionLimit: Number(process.env['DB_CONNECTION_LIMIT']) || 20,
     queueLimit: 0,
-    connectTimeout: Number(process.env.DB_CONNECT_TIMEOUT) || 10000, // 10 segundos
+    connectTimeout: Number(process.env['DB_CONNECT_TIMEOUT']) || 10000, // 10 segundos
     enableKeepAlive: true, // Habilitar conexiones persistentes para producción
     keepAliveInitialDelay: 30000, // 30 segundos antes de iniciar Keep-Alive
 });
