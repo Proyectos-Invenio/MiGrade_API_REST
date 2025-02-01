@@ -9,11 +9,12 @@ import AuthRouter from "./routes/auth.routes";
 import EstudianteRouter from "./routes/estudiante.routes";
 import AdminRouter from "./routes/administrador.routes";
 import ProfesorRouter from "./routes/profesor.routes";
-import PadreRouter from "./routes/padre.routes";
+import PadreRouter from "./routes/encargado.routes";
 import AsignaturasRouter from "./routes/asignaturas.routes";
 import RolesRouter from "./routes/roles.routes";
 import VisibilidadMenuRouter from "./routes/visibilidad_menu.routes";
-
+import AnunciosRouter from "./routes/anuncios.routes";
+import SeccionRouter from "./routes/secciones.routes";
 
 
 // Definición de la clase Aplicacion
@@ -52,7 +53,9 @@ class Aplicacion {
             PadreRouter,
             AsignaturasRouter,
             RolesRouter,
-            VisibilidadMenuRouter
+            VisibilidadMenuRouter,
+            AnunciosRouter,
+            SeccionRouter,
         ]);
     }
 
