@@ -11,7 +11,7 @@ export class Estudiante {
             const salt = bcrypt.genSaltSync(this.saltRounds);
             const hash = bcrypt.hashSync(datos.password, salt);
             await connection.query(
-                "CALL sp_crear_estudiante(?, ?, ?, ?, ?, ?)",
+                "CALL sp_crear_estudiante(?, ?, ?, ?, ?, ?, ?)",
                 [
                     datos.identification,
                     datos.nombre,
@@ -19,6 +19,7 @@ export class Estudiante {
                     datos.email,
                     hash,
                     datos.sexo,
+                    datos.seccion
                 ]
             );
         } catch (err: any) {
